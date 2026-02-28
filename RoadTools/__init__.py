@@ -27,11 +27,12 @@ class RoadToolsProperties(bpy.types.PropertyGroup):
         description="Path to a .blend file",
         subtype='FILE_PATH'
     )
-    road_length: bpy.props.FloatProperty(name="Road Length",description="The length of the road", get=get_length)
+    road_length: bpy.props.FloatProperty(name="Road Length",description="The length of the road", get=get_length, subtype='DISTANCE')
+    road_width: bpy.props.FloatProperty(name="Road Width", description="The width of the road", subtype='DISTANCE')
     start_point: bpy.props.FloatVectorProperty(name="Start Point",description="The first point on the road", subtype='TRANSLATION')
     mid_point: bpy.props.FloatVectorProperty(name="Mid Point",description="The middle point on the road", subtype='TRANSLATION')
     end_point: bpy.props.FloatVectorProperty(name="End Point",description="The last point on the road", subtype='TRANSLATION')
-
+    real_world_size: bpy.props.FloatVectorProperty(name="Real world size",description="The size of the road texture", size=2, subtype='TRANSLATION')
 
 import bpy
 from bpy_extras import view3d_utils
@@ -119,6 +120,19 @@ class OBJECT_OT_create_straight(bpy.types.Operator):
         mesh.vertices[2].co.y = context.scene.road_tool_props.end_point.y
         mesh.vertices[3].co.y = context.scene.road_tool_props.end_point.y
 
+        # Get the active UV layer
+        uv_layer = mesh.uv_layers.active.data
+
+
+        # Build a map from vertex index to loop indices
+        for poly in mesh.polygons:
+            for loop_index in poly.loop_indices:
+                loop = mesh.loops[loop_index]
+                if loop.vertex_index == 2:  # target vertex index
+                    uv_layer[loop_index].uv = (0.0,props.road_length/props.real_world_size.y)
+                if loop.vertex_index == 3:
+                    uv_layer[loop_index].uv = (props.road_width/props.real_world_size.x,props.road_length/props.real_world_size.y)
+
         #obj = bpy.data.objects.new("profile", mesh_copy)
         bpy.context.collection.objects.link(road)
 
@@ -136,9 +150,11 @@ class VIEW3D_PT_road_tools_panel(bpy.types.Panel):
         props = context.scene.road_tool_props
         layout.prop(props, "profile_file")
         layout.prop(props, "road_length")
+        layout.prop(props, "road_width")
         layout.prop(props, "start_point")
         layout.prop(props, "mid_point")
         layout.prop(props, "end_point")
+        layout.prop(props, "real_world_size")
         self.layout.operator("object.create_straight")
 
 def register():
