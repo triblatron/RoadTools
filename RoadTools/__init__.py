@@ -128,6 +128,10 @@ class OBJECT_OT_create_straight(bpy.types.Operator):
         for poly in mesh.polygons:
             for loop_index in poly.loop_indices:
                 loop = mesh.loops[loop_index]
+                if loop.vertex_index == 0:
+                    uv_layer[loop.index].uv = (0.0, 0.0)
+                if loop.vertex_index == 1:
+                    uv_layer[loop.index].uv = (props.road_width/props.real_world_size.x, 0.0)
                 if loop.vertex_index == 2:  # target vertex index
                     uv_layer[loop_index].uv = (0.0,props.road_length/props.real_world_size.y)
                 if loop.vertex_index == 3:
