@@ -9,6 +9,7 @@ bl_info = {
 }
 
 import bpy
+import bpy.props
 from mathutils import Vector
 
 import sys
@@ -148,6 +149,7 @@ class OBJECT_OT_create_straight(bpy.types.Operator):
 
 
         # Build a map from vertex index to loop indices
+        # Extract real-world size of texture from original UVs
         for poly in mesh.polygons:
             for loop_index in poly.loop_indices:
                 loop = mesh.loops[loop_index]

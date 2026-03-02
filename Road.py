@@ -1,8 +1,8 @@
 from enum import Enum
 
-from mathutils import Vector
-from mathutils import Matrix
+from Quad import Quad
 from Segment import Segment
+from pyglm import glm
 
 class RoadType(Enum):
     STRAIGHT = 0
@@ -11,17 +11,26 @@ class RoadType(Enum):
 
 class Road:
     def __init__(self):
-        pass
+        self.meshes = []
+
+    def configure(self, config: dict):
+        if "meshes" in config:
+            for meshConfig in config["meshes"]:
+                quad = Quad()
+                quad.configure(meshConfig)
+                self.meshes.append(quad)
 
     # type of geometry
     type: RoadType
+    meshes: list[Quad]
     segment: Segment
-    first_point: Vector
-    middle_point: Vector
-    last_point: Vector
+    first_point: glm.vec3
+    middle_point: glm.vec3
+    last_point: glm.vec3
     # length along centreline [m]
     length: float
     # width [m]
     width: float
     # signed radius [m], positive ccw
     radius: float
+
