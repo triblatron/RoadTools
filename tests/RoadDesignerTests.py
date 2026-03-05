@@ -30,7 +30,17 @@ class RoadDesignerTests(unittest.TestCase):
         ("data/tests/Road/Bed.toml", 0, 2, "position", "y", 0.2),
         ("data/tests/Road/Bed.toml", 0, 2, "position", "z", 0.0),
         ("data/tests/Road/Bed.toml", 0, 2, "tex_coord", "x", 0.0),
-        ("data/tests/Road/Bed.toml", 0, 2, "tex_coord", "y", 0.0222)
+        ("data/tests/Road/Bed.toml", 0, 2, "tex_coord", "y", 0.0222),
+        ("data/tests/Road/Bed.toml", 1, 0, "position", "x", -5.0),
+        ("data/tests/Road/Bed.toml", 1, 0, "position", "y", 0.0),
+        ("data/tests/Road/Bed.toml", 1, 0, "position", "z", 0.0),
+        ("data/tests/Road/Bed.toml", 1, 0, "tex_coord", "x", 0.0),
+        ("data/tests/Road/Bed.toml", 1, 0, "tex_coord", "y", 0.0),
+        ("data/tests/Road/Bed.toml", 1, 2, "position", "x", -5.0),
+        ("data/tests/Road/Bed.toml", 1, 2, "position", "y", 0.2),
+        ("data/tests/Road/Bed.toml", 1, 2, "position", "z", 0.0),
+        ("data/tests/Road/Bed.toml", 1, 2, "tex_coord", "x", 0.0),
+        ("data/tests/Road/Bed.toml", 1, 2, "tex_coord", "y", 1.0)
     ])
     def test_set_polygons(self, config_filename: str, mesh_index, vert_index, attr_name, ordinate_name, value: Any):
         sut = Road()
