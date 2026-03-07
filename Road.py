@@ -4,6 +4,9 @@ from Quad import Quad
 from Segment import Segment
 from pyglm import glm
 
+from Vertex import Vertex
+
+
 class RoadType(Enum):
     STRAIGHT = 0
     ARC=1,
@@ -16,9 +19,22 @@ class Road:
     def configure(self, config: dict):
         if "meshes" in config:
             for meshConfig in config["meshes"]:
-                quad = Quad()
-                quad.configure(meshConfig)
-                self.meshes.append(quad)
+                self.beginProfile()
+                self.meshes[-1].configure(meshConfig)
+                self.endProfile()
+
+    def beginProfile(self):
+        self.inMesh = True
+        self.meshes.append(Quad())
+        self.meshes[-1].begin()
+
+    def vertex(self, x, y, z, u, v):
+        if self.inMesh:
+            self.meshes[-1].vertex(x, y, z, u, v)
+
+    def endProfile(self):
+        self.inMesh = False
+        self.meshes[-1].end()
 
     # type of geometry
     type: RoadType
@@ -33,4 +49,5 @@ class Road:
     width: float
     # signed radius [m], positive ccw
     radius: float
+    inMesh: bool
 

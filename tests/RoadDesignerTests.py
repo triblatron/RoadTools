@@ -6,6 +6,7 @@ from parameterized import parameterized
 from pyglm import glm
 
 from Road import Road
+from RoadBuildScript import RoadBuildScript
 from Straight import Straight
 import tomllib
 
@@ -53,9 +54,23 @@ class RoadDesignerTests(unittest.TestCase):
         ("data/tests/Road/Bed.toml", 2, 2, "tex_coord", "x", 0.0),
         ("data/tests/Road/Bed.toml", 2, 2, "tex_coord", "y", 1.0)
     ])
-    def test_set_polygons(self, config_filename: str, mesh_index, vert_index, attr_name, ordinate_name, value: Any):
+    def test_configure(self, config_filename: str, mesh_index, vert_index, attr_name, ordinate_name, value: Any):
         sut = Road()
         with open(config_filename, "rb") as f:
             config = tomllib.load(f)
         sut.configure(config)
         TestUtils.assert_comparison(self, value, getattr(getattr(sut.meshes[mesh_index].verts[vert_index], attr_name), ordinate_name), 1e-3)
+
+    @parameterized.expand([
+        ("data/tests/Road/build.toml", 0, 0, "position", "x", -3.65)
+    ])
+    def test_build(self, build_filename: str, mesh_index: int, vert_index: int, attr_name: str, ordinate_name: str, value: Any):
+        build_script = RoadBuildScript()
+        with open(build_filename, "rb") as f:
+            config = tomllib.load(f)
+            build_script.configure(config)
+
+        sut = build_script.build()
+        self.assertIsNotNone(sut)
+        actual = getattr(getattr(sut.meshes[mesh_index].verts[vert_index], attr_name), ordinate_name)
+        TestUtils.assert_comparison(self, value, actual, 1e-3)

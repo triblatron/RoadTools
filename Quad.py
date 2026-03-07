@@ -17,4 +17,18 @@ class Quad:
     def sort(self):
         self.verts = sorted(self.verts, key=cmp_to_key(Vertex.compare) )
 
+    def addVertex(self, vertex: Vertex):
+        self.verts.append(vertex)
+
+    def begin(self):
+        pass
+
+    def end(self):
+        self.sort()
+
+    def vertex(self, x, y, z, u, v):
+        self.verts.append(Vertex())
+        self.verts[-1].position = glm.vec3(x, y, z)
+        self.verts[-1].tex_coord = glm.vec2(u, v)
+
     verts : list[Vertex]
