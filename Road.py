@@ -15,6 +15,7 @@ class RoadType(Enum):
 class Road:
     def __init__(self):
         self.meshes = []
+        self.segment = None
 
     def configure(self, config: dict):
         if "meshes" in config:
@@ -35,6 +36,14 @@ class Road:
     def endProfile(self):
         self.inMesh = False
         self.meshes[-1].end()
+
+    def create_straight(self, length: float):
+        self.segment = Segment()
+        self.segment.points.append(glm.vec3(0.0, 0.0, 0.0))
+        self.segment.points.append(glm.vec3(0.0, length, 0.0))
+        self.segment.tangents.append(glm.vec3(0.0, 1.0, 0.0))
+        self.segment.normals.append(glm.vec3(0.0, 0.0, 1.0))
+        self.segment.binormals.append(glm.vec3(1.0, 0.0, 0.0))
 
     # type of geometry
     type: RoadType

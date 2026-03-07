@@ -13,6 +13,8 @@ class RoadBuildCommand:
                 road.endProfile()
             elif self.args[0] == "vertex" and len(self.args) == 6:
                 road.vertex(self.args[1], self.args[2], self.args[3], self.args[4], self.args[5])
+            elif self.args[0] == "createStraight":
+                road.create_straight(self.args[1])
 
     args: list[str]
 

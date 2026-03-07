@@ -62,7 +62,7 @@ class RoadDesignerTests(unittest.TestCase):
         TestUtils.assert_comparison(self, value, getattr(getattr(sut.meshes[mesh_index].verts[vert_index], attr_name), ordinate_name), 1e-3)
 
     @parameterized.expand([
-        ("data/tests/Road/build.toml", 0, 0, "position", "x", -3.65)
+        ("data/tests/Road/singlequad.toml", 0, 0, "position", "x", -3.65)
     ])
     def test_build(self, build_filename: str, mesh_index: int, vert_index: int, attr_name: str, ordinate_name: str, value: Any):
         build_script = RoadBuildScript()
@@ -72,5 +72,25 @@ class RoadDesignerTests(unittest.TestCase):
 
         sut = build_script.build()
         self.assertIsNotNone(sut)
+
         actual = getattr(getattr(sut.meshes[mesh_index].verts[vert_index], attr_name), ordinate_name)
+        TestUtils.assert_comparison(self, value, actual, 1e-3)
+
+    @parameterized.expand([
+        ("data/tests/Road/straight.toml", "segment.length", 252.0),
+        ("data/tests/Road/straight.toml", "segment.points[1].y", 252.0),
+        ("data/tests/Road/straight.toml", "segment.binormals[0].x", 1.0),
+        ("data/tests/Road/straight.toml", "segment.normals[0].z", 1.0),
+        ("data/tests/Road/straight.toml", "segment.tangents[0].y", 1.0)
+    ])
+    def test_segment(self, config_filename: str, path: str, value):
+        build_script = RoadBuildScript()
+        with open(config_filename, "rb") as f:
+            config = tomllib.load(f)
+            build_script.configure(config)
+
+        sut = build_script.build()
+        self.assertIsNotNone(sut)
+
+        actual = TestUtils.find(sut, path)
         TestUtils.assert_comparison(self, value, actual, 1e-3)

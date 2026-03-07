@@ -1,0 +1,10 @@
+[script]
+cmds = [
+    ["beginProfile"],
+    ["vertex", 3.65, 0.2, 0.0, 1.0, 1.0],
+    ["vertex", -3.65, 0.2, 0.0, 0.0, 1.0],
+    ["vertex", -3.65, 0.0, 0.0, 0.0, 0.0],
+    ["vertex", 3.65, 0.0, 0.0, 1.0, 0.0],
+    ["endProfile"],
+    ["createStraight", 252.0]
+]
