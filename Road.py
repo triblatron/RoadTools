@@ -1,5 +1,7 @@
 from enum import Enum
+from typing import Any
 
+from Arc import Arc
 from Straight import Straight
 from Quad import Quad
 from Segment import Segment
@@ -47,12 +49,19 @@ class Road:
         self.segment.binormals.append(glm.vec3(1.0, 0.0, 0.0))
 
     def create_arc(self, length: float, radius: float):
-        pass
+        self.segment = Arc()
+        self.segment.points.append(glm.vec3(0.0, 0.0, 0.0))
+        self.segment.tangents.append(glm.vec3(0.0, 1.0, 0.0))
+        self.segment.normals.append(glm.vec3(0.0, 0.0, 1.0))
+        self.segment.binormals.append(glm.vec3(1.0, 0.0, 0.0))
+        self.segment.radius = radius
+        self.segment.length = length
+        self.segment.build()
 
     # type of geometry
     type: RoadType
     meshes: list[Quad]
-    segment: Segment
+    segment: Any
     first_point: glm.vec3
     middle_point: glm.vec3
     last_point: glm.vec3

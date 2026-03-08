@@ -1,7 +1,13 @@
 from Segment import Segment
 from pyglm import glm
 
-class Straight(Segment):
+class Straight:
+    def __init__(self):
+        self.points = []
+        self.binormals = []
+        self.tangents = []
+        self.normals = []
+
     def length(self):
         if len(self.points) == 2:
             diff =  self.points[1] - self.points[0]
@@ -18,3 +24,7 @@ class Straight(Segment):
             }
         return {}
 
+    points: list[glm.vec3]
+    tangents: list[glm.vec3]
+    normals: list[glm.vec3]
+    binormals: list[glm.vec3]

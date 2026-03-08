@@ -1,22 +1,18 @@
 from pyglm import glm
+from typing import Protocol
 
-class Segment:
+class Segment(Protocol):
     def __init__(self):
         self.points = []
         self.tangents = []
         self.normals = []
         self.binormals = []
 
-    def length(self):
-        raise NotImplementedError
+    def build(self) -> None: ...
 
-    def inertialCoord(self, offset:float, distance:float, loft:float):
-        raise NotImplementedError
+    def length(self) -> None: ...
 
-    def curveCoord(self, x:float, y:float, z:float):
-        raise NotImplementedError
+    def inertial_coord(self, offset:float, distance:float, loft:float) -> None: ...
 
-    points: list[glm.vec3]
-    tangents: list[glm.vec3]
-    normals: list[glm.vec3]
-    binormals: list[glm.vec3]
+    def curve_coord(self, x:float, y:float, z:float) -> None: ...
+
