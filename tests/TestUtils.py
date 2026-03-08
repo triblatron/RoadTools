@@ -1,9 +1,11 @@
 import operator
 import re
+from inspect import isfunction
 from typing import Any
 
 
-def assert_comparison(case, actual, expected, tolerance):
+def assert_comparison(case, expected, actual, tolerance):
+    case.assertIsNotNone(actual)
     if isinstance(actual, float) and isinstance(expected, float):
         case.assertAlmostEqual(actual, expected, delta=tolerance)
 
@@ -16,4 +18,6 @@ def find(obj:Any, path:str):
         else:
             obj = getattr(obj, attr)
 
-    return None
+    if callable(obj):
+        return obj()
+    return obj
