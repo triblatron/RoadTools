@@ -17,7 +17,7 @@ def find(obj:Any, path:str):
             obj = operator.getitem(getattr(obj, m.group(1)),int(m.group(2)))
         else:
             obj = getattr(obj, attr)
+            if callable(obj):
+                return obj()
 
-    if callable(obj):
-        return obj()
     return obj
