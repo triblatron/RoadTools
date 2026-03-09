@@ -47,6 +47,7 @@ class Road:
         self.segment.tangents.append(glm.vec3(0.0, 1.0, 0.0))
         self.segment.normals.append(glm.vec3(0.0, 0.0, 1.0))
         self.segment.binormals.append(glm.vec3(1.0, 0.0, 0.0))
+        self.segment.build()
 
     def create_arc(self, length: float, radius: float, num_divisions: int):
         self.segment = Arc()

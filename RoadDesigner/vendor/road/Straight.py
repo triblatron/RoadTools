@@ -1,3 +1,4 @@
+from Polyline import Polyline
 from Segment import Segment
 from pyglm import glm
 
@@ -7,6 +8,7 @@ class Straight:
         self.binormals = []
         self.tangents = []
         self.normals = []
+        self.tessellation = None
 
     def length(self):
         if len(self.points) == 2:
@@ -15,7 +17,7 @@ class Straight:
         else:
             return 0.0
 
-    def  inertialCoord(self, offset:float, distance:float, loft:float):
+    def inertialCoord(self, offset:float, distance:float, loft:float):
         if len(self.points) >= 1 and len(self.binormals) == 1 and len(self.tangents)==1 and len(self.normals) == 1:
             return {
                 'x':self.points[0]+offset * self.binormals[0],
@@ -23,6 +25,11 @@ class Straight:
                 'z':self.points[0]+loft * self.normals[0],
             }
         return {}
+
+    def build(self):
+        self.tessellation = Polyline(1)
+        self.tessellation.points[0] = self.points[0]
+        self.tessellation.points[1] = self.points[1]
 
     points: list[glm.vec3]
     tangents: list[glm.vec3]
