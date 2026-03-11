@@ -1,9 +1,15 @@
 from enum import Enum
 from typing import Any
 
-from . import Arc
-from . import Straight
-from . import Quad
+try:
+    from . import Arc
+    from . import Straight
+    from . import Quad
+except ImportError:
+    import Arc
+    import Straight
+    import Quad
+
 from pyglm import glm
 
 class RoadType(Enum):

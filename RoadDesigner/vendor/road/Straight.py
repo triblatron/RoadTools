@@ -1,4 +1,8 @@
-from . import Polyline
+try:
+    from . import Polyline
+except ImportError:
+    import Polyline
+
 from pyglm import glm
 
 class Straight:

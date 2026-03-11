@@ -1,6 +1,9 @@
 from pyglm import glm
 
-from . import Configurable
+try:
+    from . import Configurable
+except ImportError:
+    import Configurable
 
 class Vertex:
     def __init__(self):

@@ -1,6 +1,9 @@
 import math
 from pyglm import glm
-from . import Polyline
+try:
+    from . import Polyline
+except ImportError:
+    import Polyline
 
 class Arc:
     def __init__(self):
@@ -30,7 +33,7 @@ class Arc:
             self.tessellate(num_points)
 
     def tessellate(self, num_divisions: int):
-        self.tessellation = Polyline(num_divisions)
+        self.tessellation = Polyline.Polyline(num_divisions)
         max_theta = self.length / abs(self.radius)
         abs_radius = abs(self.radius)
         for point_index in range(num_divisions + 1):
@@ -42,4 +45,4 @@ class Arc:
     normals: list[glm.vec3]
     binormals: list[glm.vec3]
     length: float
-    tessellation: Polyline
+    tessellation: Polyline.Polyline

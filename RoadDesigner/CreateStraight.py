@@ -1,5 +1,8 @@
 import bpy
-from .vendor.road import Road
+try:
+    from .vendor.road import Road
+except ImportError:
+    import vendor.road
 
 class CreateStraight(bpy.types.Operator):
     bl_idname = "object.create_straight"
@@ -7,18 +10,18 @@ class CreateStraight(bpy.types.Operator):
     def execute(self, context):
         # 1. Create a Road at the specified start point
         props = context.scene.road_tool_props
-        file_path = props.profile_file
-        print(f"Selected file: {file_path}")
-
-        # now use it, e.g.:
-        if not file_path:
-            self.report({'WARNING'}, "No file selected")
-            return {'CANCELLED'}
-
-        with bpy.data.libraries.load(file_path) as (data_from, data_to):
-            print(data_from.meshes)
-            data_to.meshes = data_from.meshes
-            data_to.objects = data_from.objects
+        # file_path = props.profile_file
+        # print(f"Selected file: {file_path}")
+        #
+        # # now use it, e.g.:
+        # if not file_path:
+        #     self.report({'WARNING'}, "No file selected")
+        #     return {'CANCELLED'}
+        #
+        # with bpy.data.libraries.load(file_path) as (data_from, data_to):
+        #     print(data_from.meshes)
+        #     data_to.meshes = data_from.meshes
+        #     data_to.objects = data_from.objects
 
         road = Road.Road()
 

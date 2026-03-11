@@ -1,5 +1,8 @@
 from pyglm import glm
-from . import Vertex
+try:
+    from . import Vertex
+except ImportError:
+    import Vertex
 from functools import cmp_to_key
 
 class Quad:
