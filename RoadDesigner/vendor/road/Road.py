@@ -34,9 +34,10 @@ class Road:
                 self.meshes[-1].configure(meshConfig)
                 self.endProfile()
 
-    def beginProfile(self, name: str):
+    def beginProfile(self, name: str, index:int=-1):
         self.inMesh = True
         self.meshes.append(Quad.Quad())
+        self.meshes[-1].index = index
         if len(name)>0:
             self.profiles[name] = self.meshes[-1]
         self.meshes[-1].begin()
@@ -49,6 +50,7 @@ class Road:
             self.meshes[-1].vertex(x, y, z, u, v)
 
     def endProfile(self):
+        print("Road.endProfile", flush=True)
         self.inMesh = False
         self.meshes[-1].end()
 

@@ -1,6 +1,6 @@
 import math
-from pyglm import glm
 try:
+    from pyglm import glm
     from . import Polyline
 except ImportError:
     import Polyline

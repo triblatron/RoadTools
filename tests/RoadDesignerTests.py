@@ -52,7 +52,7 @@ class RoadDesignerTests(unittest.TestCase):
         ("data/tests/Road/Bed.toml", 2, 2, "position", "y", 0.2),
         ("data/tests/Road/Bed.toml", 2, 2, "position", "z", 5.0*math.sin(math.pi/4.0)),
         ("data/tests/Road/Bed.toml", 2, 2, "tex_coord", "x", 0.0),
-        ("data/tests/Road/Bed.toml", 2, 2, "tex_coord", "y", 1.0)
+        ("data/tests/Road/Bed.toml", 2, 2, "tex_coord", "y", 1.0),
     ])
     def test_configure(self, config_filename: str, mesh_index, vert_index, attr_name, ordinate_name, value: Any):
         sut = Road()
@@ -62,9 +62,25 @@ class RoadDesignerTests(unittest.TestCase):
         TestUtils.assert_comparison(self, value, getattr(getattr(sut.meshes[mesh_index].verts[vert_index], attr_name), ordinate_name), 1e-3)
 
     @parameterized.expand([
-        ("data/tests/Road/singlequad.toml", 0, 0, "position", "x", -3.65)
+        ("data/tests/Road/singlequad.toml", 0, 0, "position.x", -3.65),
+        ("data/tests/Road/blenderprofile.toml", 0, 0, "position.x", 3.65),
+        ("data/tests/Road/blenderprofile.toml", 0, 0, "position.y", 0.0),
+        ("data/tests/Road/blenderprofile.toml", 0, 1, "position.x", 5.0),
+        ("data/tests/Road/blenderprofile.toml", 0, 1, "position.y", 0.0),
+        ("data/tests/Road/blenderprofile.toml", 0, 2, "position.x", 3.65),
+        ("data/tests/Road/blenderprofile.toml", 0, 2, "position.y", 0.2),
+        ("data/tests/Road/blenderprofile.toml", 0, 3, "position.x", 5.0),
+        ("data/tests/Road/blenderprofile.toml", 0, 3, "position.y", 0.2),
+        ("data/tests/Road/blenderprofile.toml", 1, 0, "position.x", -5.0),
+        ("data/tests/Road/blenderprofile.toml", 1, 0, "position.y", 0.0),
+        ("data/tests/Road/blenderprofile.toml", 1, 1, "position.x", -3.65),
+        ("data/tests/Road/blenderprofile.toml", 1, 1, "position.y", 0.0),
+        ("data/tests/Road/blenderprofile.toml", 1, 2, "position.x", -5.0),
+        ("data/tests/Road/blenderprofile.toml", 1, 2, "position.y", 0.2),
+        ("data/tests/Road/blenderprofile.toml", 1, 3, "position.x", -3.65),
+        ("data/tests/Road/blenderprofile.toml", 1, 3, "position.y", 0.2)
     ])
-    def test_build(self, build_filename: str, mesh_index: int, vert_index: int, attr_name: str, ordinate_name: str, value: Any):
+    def test_build(self, build_filename: str, mesh_index: int, vert_index: int, attr_name: str, value: Any):
         build_script = RoadBuildScript()
         with open(build_filename, "rb") as f:
             config = tomllib.load(f)
@@ -73,7 +89,8 @@ class RoadDesignerTests(unittest.TestCase):
         sut = build_script.build()
         self.assertIsNotNone(sut)
 
-        actual = getattr(getattr(sut.meshes[mesh_index].verts[vert_index], attr_name), ordinate_name)
+        actual = TestUtils.find(sut.meshes[mesh_index].verts[vert_index], attr_name)
+        #actual = getattr(getattr(sut.meshes[mesh_index].verts[vert_index], attr_name), ordinate_name)
         TestUtils.assert_comparison(self, value, actual, 1e-3)
 
     @parameterized.expand([
@@ -100,6 +117,14 @@ class RoadDesignerTests(unittest.TestCase):
         ("data/tests/Road/straight.toml", "surface.points[3].position.y", 252.0),
         ("data/tests/Road/straight.toml", "surface.points[3].tex_coord.x", 1.0),
         ("data/tests/Road/straight.toml", "surface.points[3].tex_coord.y", 252.0/(0.2/0.0222222)),
+        ("data/tests/Road/straight.toml", "surface.quads[0][0]", 0),
+        ("data/tests/Road/straight.toml", "surface.quads[0][1]", 1),
+        ("data/tests/Road/straight.toml", "surface.quads[0][2]", 2),
+        ("data/tests/Road/straight.toml", "surface.quads[0][3]", 3),
+        ("data/tests/Road/fullprofile.toml", "surface.quads[1][0]", 4),
+        ("data/tests/Road/fullprofile.toml", "surface.quads[1][1]", 5),
+        ("data/tests/Road/fullprofile.toml", "surface.quads[1][2]", 6),
+        ("data/tests/Road/fullprofile.toml", "surface.quads[1][3]", 7),
         ("data/tests/Road/arc.toml", "segment.tangents[1].y", math.cos(19.25138192/180*math.pi)),
         ("data/tests/Road/arc.toml", "segment.tessellation.num_points", 11),
         ("data/tests/Road/arc.toml", "profiles.bed.width", 7.3),

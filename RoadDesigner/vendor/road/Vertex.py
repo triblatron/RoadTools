@@ -1,6 +1,5 @@
-from pyglm import glm
-
 try:
+    from pyglm import glm
     from . import Configurable
 except ImportError:
     import Configurable
@@ -17,19 +16,22 @@ class Vertex:
         self.tex_coord.x = Configurable.Configurable.readConfig(config, "u", 0.0)
         self.tex_coord.y = Configurable.Configurable.readConfig(config, "v", 0.0)
 
+    def __repr__(self):
+        return f"Vertex position:{self.position.x} {self.position.y} {self.position.z}, tex_coord:{self.tex_coord.x} {self.tex_coord.y}"
+
     @classmethod
     def compare(cls,a,b):
-        if a.position.y < b.position.y:
+        if a.position.y < b.position.y and abs(a.position.y - b.position.y) > 0.001:
             return -1
-        elif a.position.y > b.position.y:
+        elif a.position.y > b.position.y and abs(a.position.y - b.position.y) > 0.001:
+            return 1    
+        elif a.position.x < b.position.x and abs(a.position.x - b.position.x) > 0.001:
+            return -1
+        elif a.position.x > b.position.x and abs(a.position.x - b.position.x) > 0.001:
             return 1
-        elif a.position.x < b.position.x:
+        elif a.position.z < b.position.z and abs(a.position.z - b.position.z) > 0.001:
             return -1
-        elif a.position.x > b.position.x:
-            return 1
-        elif a.position.z < b.position.z:
-            return -1
-        elif a.position.z > b.position.z:
+        elif a.position.z > b.position.z and abs(a.position.z - b.position.z) > 0.001:
             return 1
 
         return 0

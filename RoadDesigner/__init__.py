@@ -2,13 +2,17 @@ import os
 import sys
 # Get absolute path to vendor directory
 vendor_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "vendor")
-
+print(vendor_path)
 if vendor_path not in sys.path:
     sys.path.insert(0, vendor_path)
 from . import ExtrudeStraight
 from . import CreateStraight
 from . import CreateArc
-from .vendor.road import Road
+from road import *
+
+# import debugpy
+# debugpy.listen(5678)
+# debugpy.wait_for_client()  # pauses until VS Code attaches
 
 bl_info = {
     "name": "Road Designer",
@@ -36,13 +40,13 @@ class RoadDesignerProperties(bpy.types.PropertyGroup):
         description="Path to a .blend file",
         subtype='FILE_PATH'
     )
-    road_length: bpy.props.FloatProperty(name="Road Length",description="The length of the road", get=get_length, subtype='DISTANCE')
-    road_width: bpy.props.FloatProperty(name="Road Width", description="The width of the road", subtype='DISTANCE')
-    road_radius: bpy.props.FloatProperty(name="Road Radius", description="The radius of the road", subtype='DISTANCE')
-    num_divisions: bpy.props.IntProperty(name="Number of divisions", description="The number of divisions in the swept surface of the road")
+    road_length: bpy.props.FloatProperty(name="Road Length",description="The length of the road", get=get_length, subtype='DISTANCE', default=252.0)
+    road_width: bpy.props.FloatProperty(name="Road Width", description="The width of the road", subtype='DISTANCE', default=7.3)
+    road_radius: bpy.props.FloatProperty(name="Road Radius", description="The radius of the road", subtype='DISTANCE', default=750.0)
+    num_divisions: bpy.props.IntProperty(name="Number of divisions", description="The number of divisions in the swept surface of the road", default=1)
     start_point: bpy.props.FloatVectorProperty(name="Start Point",description="The first point on the road", subtype='TRANSLATION')
     mid_point: bpy.props.FloatVectorProperty(name="Mid Point",description="The middle point on the road", subtype='TRANSLATION')
-    end_point: bpy.props.FloatVectorProperty(name="End Point",description="The last point on the road", subtype='TRANSLATION')
+    end_point: bpy.props.FloatVectorProperty(name="End Point",description="The last point on the road", subtype='TRANSLATION', default=(0.0,252.0,0.0))
     real_world_size: bpy.props.FloatVectorProperty(name="Real world size",description="The size of the road texture", size=2, subtype='TRANSLATION')
 import bpy
 

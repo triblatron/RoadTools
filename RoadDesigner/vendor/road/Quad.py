@@ -1,5 +1,5 @@
-from pyglm import glm
 try:
+    from pyglm import glm
     from . import Vertex
 except ImportError:
     import Vertex
@@ -8,6 +8,7 @@ from functools import cmp_to_key
 class Quad:
     def __init__(self):
         self.verts = []
+        self.index = 0
 
     def configure(self, config):
         if "verts" in config:
@@ -26,8 +27,13 @@ class Quad:
     def begin(self):
         pass
 
-    def end(self):
+    def end(self, op=None):
         self.sort()
+        s = f"Quad.end():sorted verts now: {self.verts}"
+        if op is not None:
+            op.report({'INFO'}, s)
+        else:
+            print(s)
 
     def vertex(self, x, y, z, u, v):
         self.verts.append(Vertex.Vertex())
