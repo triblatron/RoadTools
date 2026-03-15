@@ -1,7 +1,9 @@
 try:
     from . import Polyline
+    from . import Vertex
 except ImportError:
     import Polyline
+    import Vertex
 
 from pyglm import glm
 
@@ -20,14 +22,9 @@ class Straight:
         else:
             return 0.0
 
-    def inertialCoord(self, offset:float, distance:float, loft:float):
+    def inertial_coord(self, offset:float, distance:float, loft:float, v:Vertex.Vertex) -> None:
         if len(self.points) >= 1 and len(self.binormals) == 1 and len(self.tangents)==1 and len(self.normals) == 1:
-            return {
-                'x':self.points[0]+offset * self.binormals[0],
-                'y':self.points[0]+distance * self.tangents[0],
-                'z':self.points[0]+loft * self.normals[0],
-            }
-        return {}
+            v.position = self.points[0].x + offset * self.binormals[0] + distance * self.tangents[0] + loft * self.normals[0]
 
     def build(self):
         self.tessellation = Polyline.Polyline(1)

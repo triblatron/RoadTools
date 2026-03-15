@@ -1,5 +1,9 @@
 from pyglm import glm
 from typing import Protocol
+try:
+    from . import Vertex
+except ImportError:
+    import Vertex
 
 class Segment(Protocol):
     def __init__(self):
@@ -12,7 +16,7 @@ class Segment(Protocol):
 
     def length(self) -> None: ...
 
-    def inertial_coord(self, offset:float, distance:float, loft:float) -> None: ...
+    def inertial_coord(self, offset:float, distance:float, loft:float, v:Vertex.Vertex) -> None:...
 
     def curve_coord(self, x:float, y:float, z:float) -> None: ...
 

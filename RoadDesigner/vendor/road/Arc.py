@@ -2,8 +2,10 @@ import math
 try:
     from pyglm import glm
     from . import Polyline
+    from . import Vertex
 except ImportError:
     import Polyline
+    import Vertex
 
 class Arc:
     def __init__(self):
@@ -39,6 +41,14 @@ class Arc:
         for point_index in range(num_divisions + 1):
             theta = point_index / num_divisions * max_theta
             self.tessellation.points[point_index] = (self.points[0] + math.copysign(1, self.radius) * (abs_radius - abs_radius * math.cos(theta)) * self.binormals[0] + abs_radius * math.sin(theta) * self.tangents[0])
+
+    def inertial_coord(self, offset:float, distance:float, loft:float, v:Vertex.Vertex):
+        abs_radius = abs(self.radius)
+        theta = distance / abs_radius
+        v.position = (self.points[0] + math.copysign(1, self.radius) * (abs_radius - abs_radius * math.cos(theta)) * self.binormals[0])
+        v.position += offset * self.binormals[0]
+        v.position+= abs_radius * math.sin(theta) * self.tangents[0]
+        v.position+= loft * self.normals[0]
 
     points: list[glm.vec3]
     tangents: list[glm.vec3]
