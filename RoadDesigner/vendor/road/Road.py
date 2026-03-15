@@ -1,7 +1,6 @@
 from enum import Enum
 from typing import Any
 
-
 try:
     from . import Arc
     from . import Straight
@@ -50,7 +49,6 @@ class Road:
             self.meshes[-1].vertex(x, y, z, u, v)
 
     def endProfile(self):
-        print("Road.endProfile", flush=True)
         self.inMesh = False
         self.meshes[-1].end()
 
@@ -74,6 +72,8 @@ class Road:
         self.segment.radius = radius
         self.segment.length = length
         self.segment.build(num_divisions)
+        self.surface = SweptSurface.SweptSurface(self.meshes, self.segment)
+        self.surface.build()
 
     # type of geometry
     type: RoadType
