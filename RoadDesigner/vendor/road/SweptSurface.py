@@ -21,6 +21,8 @@ class SweptSurface:
     def num_points(self):
         return len(self.points)
 
+    # Note that the vertices are output in Blender CCW winding
+    # not the internal sorted order
     def build(self):
         # Somehow build the surface.
         # for each point in the axis do:
