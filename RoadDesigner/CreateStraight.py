@@ -1,4 +1,4 @@
-eimport traceback
+import traceback
 
 import bpy
 try:
@@ -35,7 +35,9 @@ class CreateStraight(bpy.types.Operator):
             uv_layer = mesh.uv_layers.active.data
             for poly in mesh.polygons:
                 self.report({'INFO'}, "Creating profile: " + mesh.name)
-                road.beginProfile(mesh.name, index)
+                parent_obj = [obj for obj in bpy.data.objects if obj.data == mesh]
+                assert(len(parent_obj)==1)
+                road.beginProfile(parent_obj[0].name, index)
                 for loop_index in poly.loop_indices:
                     loop = mesh.loops[loop_index]
                     vert = mesh.vertices[loop.vertex_index]
@@ -62,8 +64,11 @@ class CreateStraight(bpy.types.Operator):
             spline.points[i].co = (p.x, p.y, p.z, 1.0)  # 4th value is weight
 
         converter = SweptSurfaceConverter.SweptSurfaceConverter(road.surface)
-
-        converter.convert(self, context)
+        road_objs = []
+        for name in road.profiles.keys():
+            road_objs.append(bpy.data.objects[name])
+        #["shoulder_left"], bpy.data.objects["bed"], bpy.data.objects["shoulder_right"]]
+        converter.convert(self, context, road_objs, data_to.meshes)
 
         # Make sure it's open (not closed)
         spline.use_cyclic_u = False

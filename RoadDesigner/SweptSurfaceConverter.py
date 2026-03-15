@@ -20,24 +20,33 @@ class SweptSurfaceConverter:
 
         return None
 
-    def convert(self, op, context):
+    def convert(self, op, context, profile_objs, profile_meshes):
         self.mesh = bpy.data.meshes.new("RoadMesh")
         self.obj = bpy.data.objects.new("surface", self.mesh)
         context.collection.objects.link(self.obj)
+        
+        material_index_map = {}
+        for quad_index, quad in enumerate(self.surface.quads):
+            mat = profile_objs[quad_index].data.materials[0]
+            if mat.name not in material_index_map:
+                material_index_map[mat.name] = len(self.obj.data.materials)
+                self.obj.data.materials.append(mat)  # ✅ correct way to add
 
         self.bm = bmesh.new()
-        for quad in self.surface.quads:
+        uv_layer = self.bm.loops.layers.uv.new("UVMap")
+        for quad_index, quad in enumerate(self.surface.quads):
             v1 = self.add_vert(self.surface.points[quad[0]])
             v2 = self.add_vert(self.surface.points[quad[1]])
             v3 = self.add_vert(self.surface.points[quad[2]])
             v4 = self.add_vert(self.surface.points[quad[3]])
 
             face = self.bm.faces.new([v1, v2, v3, v4])
-
-            uv_layer = self.bm.loops.layers.uv.new("UVMap")
+            mat = profile_objs[quad_index].data.materials[0]
+            face.material_index = material_index_map[mat.name]            
             for loop, vert_index in zip(face.loops, quad):
                 op.report({'INFO'}, f"Adding loop {loop} to UVMap with vertex index {vert_index} position {self.surface.points[vert_index].position} uv {self.surface.points[vert_index].tex_coord}")
                 loop[uv_layer].uv = (self.surface.points[vert_index].tex_coord.x, self.surface.points[vert_index].tex_coord.y)
+
 
         self.bm.to_mesh(self.mesh)
         self.bm.free()
