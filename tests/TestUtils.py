@@ -23,7 +23,8 @@ def find(obj:Any, path:str):
             m = re.match(r'\[(\d+)]', subattr)
             while m is not None:
                 obj = operator.getitem(obj,int(m.group(1)))
-                m = re.match(r'\[(\d+)]', attr[m.span(1)[1]])
+                subattr = subattr[m.span(1)[1]+1:]
+                m = re.match(r'\[(\d+)]', subattr)
         else:
             if callable(obj):
                 obj = obj()

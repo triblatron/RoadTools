@@ -12,6 +12,9 @@ import tomllib
 
 from tests import TestUtils
 
+class TestObj:
+    def __init__(self, a):
+        self.a = a
 
 class RoadDesignerTests(unittest.TestCase):
     @parameterized.expand([
@@ -139,5 +142,13 @@ class RoadDesignerTests(unittest.TestCase):
         sut = build_script.build()
         self.assertIsNotNone(sut)
 
+        actual = TestUtils.find(sut, path)
+        TestUtils.assert_comparison(self, value, actual, 1e-3)
+
+    @parameterized.expand([
+        ([[[0]]], "a[0][0][0]", 0)
+    ])
+    def test_find(self, obj, path, value):
+        sut = TestObj(obj)
         actual = TestUtils.find(sut, path)
         TestUtils.assert_comparison(self, value, actual, 1e-3)
