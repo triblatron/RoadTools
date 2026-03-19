@@ -14,7 +14,10 @@ class RoadBuildCommand:
             elif self.args[0] == "vertex" and len(self.args) == 6:
                 road.vertex(self.args[1], self.args[2], self.args[3], self.args[4], self.args[5])
             elif self.args[0] == "createStraight":
-                road.create_straight(self.args[1])
+                if len(self.args) == 3:
+                    road.create_straight(self.args[1], self.args[2])
+                else:
+                    road.create_straight(self.args[1],1)
             elif self.args[0] == "createArc" and len(self.args) == 4:
                 road.create_arc(self.args[1],self.args[2], self.args[3])
 

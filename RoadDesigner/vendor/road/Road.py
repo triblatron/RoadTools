@@ -52,14 +52,14 @@ class Road:
         self.inMesh = False
         self.meshes[-1].end()
 
-    def create_straight(self, length: float):
+    def create_straight(self, length: float, num_divisions: int):
         self.segment = Straight.Straight()
         self.segment.points.append(glm.vec3(0.0, 0.0, 0.0))
         self.segment.points.append(glm.vec3(0.0, length, 0.0))
         self.segment.tangents.append(glm.vec3(0.0, 1.0, 0.0))
         self.segment.normals.append(glm.vec3(0.0, 0.0, 1.0))
         self.segment.binormals.append(glm.vec3(1.0, 0.0, 0.0))
-        self.segment.build()
+        self.segment.build(num_divisions)
         self.surface = SweptSurface.SweptSurface(self.meshes, self.segment)
         self.surface.build()
 

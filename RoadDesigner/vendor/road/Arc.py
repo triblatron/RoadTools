@@ -42,13 +42,16 @@ class Arc:
             theta = point_index / num_divisions * max_theta
             self.tessellation.points[point_index] = (self.points[0] + math.copysign(1, self.radius) * (abs_radius - abs_radius * math.cos(theta)) * self.binormals[0] + abs_radius * math.sin(theta) * self.tangents[0])
 
-    def inertial_coord(self, offset:float, distance:float, loft:float, v:Vertex.Vertex):
+    def inertial_coord(self, offset:float, distance:float, loft:float):
         abs_radius = abs(self.radius)
         theta = distance / abs_radius
-        v.position = (self.points[0] + math.copysign(1, self.radius) * (abs_radius - abs_radius * math.cos(theta)) * self.binormals[0])
-        v.position += offset * self.binormals[0]
-        v.position+= abs_radius * math.sin(theta) * self.tangents[0]
-        v.position+= loft * self.normals[0]
+        v = glm.vec3()
+        v = (self.points[0] + math.copysign(1, self.radius) * (abs_radius - abs_radius * math.cos(theta)) * self.binormals[0])
+        v += offset * self.binormals[0]
+        v += abs_radius * math.sin(theta) * self.tangents[0]
+        v += loft * self.normals[0]
+
+        return v
 
     points: list[glm.vec3]
     tangents: list[glm.vec3]

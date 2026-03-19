@@ -138,6 +138,20 @@ class RoadDesignerTests(unittest.TestCase):
         ("data/tests/Road/arc.toml", "surface.points[1].position.y", 0.0),
         ("data/tests/Road/arc.toml", "surface.points[1].tex_coord.x", 1.0),
         ("data/tests/Road/arc.toml", "surface.points[1].tex_coord.y", 0.0),
+        ("data/tests/Road/multisegmentstraight.toml", "segment.tessellation.num_points", 3),
+        ("data/tests/Road/multisegmentstraight.toml", "segment.tessellation.points[0][0]", 0.0),
+        ("data/tests/Road/multisegmentstraight.toml", "segment.tessellation.points[0][1]", 0.0),
+        ("data/tests/Road/multisegmentstraight.toml", "segment.tessellation.points[1][0]", 0.0),
+        ("data/tests/Road/multisegmentstraight.toml", "segment.tessellation.points[1][1]", 252.0/2.0),
+        ("data/tests/Road/multisegmentstraight.toml", "segment.tessellation.points[2][0]", 0.0),
+        ("data/tests/Road/multisegmentstraight.toml", "segment.tessellation.points[2][1]", 252.0/1.0),
+        ("data/tests/Road/multisegmentstraight.toml", "surface.num_points", 2*4),
+        ("data/tests/Road/multisegmentstraight.toml", "surface.points[0].position.x", -3.65),
+        ("data/tests/Road/multisegmentstraight.toml", "surface.points[0].position.y", 0.0),
+        ("data/tests/Road/multisegmentstraight.toml", "surface.points[1].position.x", 3.65),
+        ("data/tests/Road/multisegmentstraight.toml", "surface.points[1].position.y", 0.0),
+        ("data/tests/Road/multisegmentstraight.toml", "surface.points[2].position.x", -3.65),
+        ("data/tests/Road/multisegmentstraight.toml", "surface.points[2].position.y", 252.0/2.0),
     ])
     def test_segment(self, config_filename: str, path: str, value):
         build_script = RoadBuildScript()

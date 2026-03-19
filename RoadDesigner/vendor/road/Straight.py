@@ -22,14 +22,22 @@ class Straight:
         else:
             return 0.0
 
-    def inertial_coord(self, offset:float, distance:float, loft:float, v:Vertex.Vertex) -> None:
+    def inertial_coord(self, offset:float, distance:float, loft:float) -> glm.vec3:
         if len(self.points) >= 1 and len(self.binormals) == 1 and len(self.tangents)==1 and len(self.normals) == 1:
-            v.position = self.points[0].x + offset * self.binormals[0] + distance * self.tangents[0] + loft * self.normals[0]
+            v = self.points[0] + offset * self.binormals[0] + distance * self.tangents[0] + loft * self.normals[0]
 
-    def build(self):
-        self.tessellation = Polyline.Polyline(1)
+            return v
+
+    def build(self, num_divisions:int):
+        self.tessellation = Polyline.Polyline(num_divisions)
         self.tessellation.points[0] = self.points[0]
-        self.tessellation.points[1] = self.points[1]
+        totalLength = self.length()
+        point = glm.vec3()
+        for point_index in range(1,self.tessellation.num_points()):
+            distance = totalLength * point_index / num_divisions
+            point = self.inertial_coord(0.0, distance, 0.0)
+            self.tessellation.points[point_index] = point
+            self.tessellation.distance[point_index] = distance
 
     points: list[glm.vec3]
     tangents: list[glm.vec3]
