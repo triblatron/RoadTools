@@ -38,9 +38,12 @@ class Arc:
         self.tessellation = Polyline.Polyline(num_divisions)
         max_theta = self.length / abs(self.radius)
         abs_radius = abs(self.radius)
+        totalLength = self.length
         for point_index in range(num_divisions + 1):
             theta = point_index / num_divisions * max_theta
+            distance = totalLength * point_index / num_divisions
             self.tessellation.points[point_index] = (self.points[0] + math.copysign(1, self.radius) * (abs_radius - abs_radius * math.cos(theta)) * self.binormals[0] + abs_radius * math.sin(theta) * self.tangents[0])
+            self.tessellation.distance[point_index] = distance
 
     def inertial_coord(self, offset:float, distance:float, loft:float):
         abs_radius = abs(self.radius)
